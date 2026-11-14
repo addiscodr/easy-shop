@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,12 +48,23 @@ fun AuthScreen(modifier: Modifier = Modifier){
             ))
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text(text = "Best online shopping platform with best quality items and affordable prices",
+        Text(text = "Best online shopping platform with high quality items and affordable prices",
             style = TextStyle(
 
                 textAlign = TextAlign.Center
 
             ))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = {}, modifier = Modifier.fillMaxWidth().height(60.dp)) {
+            Text(text = "Login", fontSize = 21.sp)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        OutlinedButton(onClick = {}, modifier = Modifier.fillMaxWidth().height(60.dp)) {
+            Text(text = "Signup", fontSize = 21.sp)
+        }
 
 
     }
