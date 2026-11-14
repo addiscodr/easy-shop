@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -25,10 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.addiscodr.easyshop.AppUtil
 import com.addiscodr.easyshop.R
+import com.addiscodr.easyshop.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(modifier: Modifier) {
+fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = viewModel()) {
     var email by remember {
         mutableStateOf(value = "")
     }
@@ -40,8 +44,11 @@ fun SignupScreen(modifier: Modifier) {
     var password by remember {
         mutableStateOf(value = "")
     }
+
+    val context = LocalContext.current
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
@@ -106,15 +113,30 @@ fun SignupScreen(modifier: Modifier) {
             },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation())
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {
+        Button(
+            onClick = {
+            authViewModel.signup(
+                email,
+                name,
+                password,
+
+            ){success, errorMessage ->
+                if(success){
+                    AppUtil.showToast(context, "Signup successful")
+                } else {
+                    AppUtil.showToast(
+                        context,
+                        errorMessage?: "Something went wrong!"
+                    )
+                }
+            }
 
         }, modifier = Modifier.fillMaxWidth().height(60.dp)) {
             Text(text = "Signup", fontSize = 21.sp)
         }
-
-
 
     }
 }
