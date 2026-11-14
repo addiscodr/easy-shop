@@ -21,10 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.addiscodr.easyshop.R
 
 @Composable
-fun AuthScreen(modifier: Modifier = Modifier){
+fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController){
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(32.dp),
@@ -56,13 +57,17 @@ fun AuthScreen(modifier: Modifier = Modifier){
             ))
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {}, modifier = Modifier.fillMaxWidth().height(60.dp)) {
+        Button(onClick = {
+            navController.navigate(route = "login")
+        }, modifier = Modifier.fillMaxWidth().height(60.dp)) {
             Text(text = "Login", fontSize = 21.sp)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedButton(onClick = {}, modifier = Modifier.fillMaxWidth().height(60.dp)) {
+        OutlinedButton(onClick = {
+            navController.navigate(route = "signup")
+        }, modifier = Modifier.fillMaxWidth().height(60.dp)) {
             Text(text = "Signup", fontSize = 21.sp)
         }
 
