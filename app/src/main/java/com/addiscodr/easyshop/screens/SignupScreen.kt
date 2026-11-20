@@ -27,12 +27,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.addiscodr.easyshop.AppUtil
 import com.addiscodr.easyshop.R
 import com.addiscodr.easyshop.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = viewModel()) {
+fun SignupScreen(modifier: Modifier = Modifier, navController: NavController,  authViewModel: AuthViewModel = viewModel()) {
     var email by remember {
         mutableStateOf(value = "")
     }
@@ -43,6 +44,10 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
 
     var password by remember {
         mutableStateOf(value = "")
+    }
+
+    var isLoading by remember {
+        mutableStateOf(value = false)
     }
 
     val context = LocalContext.current
@@ -64,7 +69,7 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "Create and Account", modifier = Modifier.fillMaxWidth(), style = TextStyle(
+            text = "Create an Account", modifier = Modifier.fillMaxWidth(), style = TextStyle(
                 fontSize = 21.sp,
                 )
         )
@@ -87,7 +92,8 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
             label = {
                 Text(text = "Email")
             },
-            modifier = Modifier.fillMaxWidth())
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -118,6 +124,7 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
 
         Button(
             onClick = {
+                isLoading = true
             authViewModel.signup(
                 email,
                 name,
@@ -125,8 +132,12 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
 
             ){success, errorMessage ->
                 if(success){
-                    AppUtil.showToast(context, "Signup successful")
+                    isLoading = false
+                    navController.navigate(route = "home"){
+                        popUpTo(route = "auth"){ inclusive = true}
+                    }
                 } else {
+                    isLoading = false
                     AppUtil.showToast(
                         context,
                         errorMessage?: "Something went wrong!"
@@ -134,8 +145,11 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel = v
                 }
             }
 
-        }, modifier = Modifier.fillMaxWidth().height(60.dp)) {
-            Text(text = "Signup", fontSize = 21.sp)
+        },
+            enabled = !isLoading,
+            modifier = Modifier.fillMaxWidth()
+                .height(60.dp)) {
+            Text(text =  if(isLoading) "Creating account..." else "Signup", fontSize = 21.sp)
         }
 
     }

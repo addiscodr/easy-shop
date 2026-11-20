@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -25,19 +26,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.addiscodr.easyshop.AppUtil
 import com.addiscodr.easyshop.R
+import com.addiscodr.easyshop.viewmodel.AuthViewModel
 
 @Composable
-fun LoginScreen (modifier: Modifier){
+fun LoginScreen (modifier: Modifier,navController: NavController,  authViewModel: AuthViewModel = viewModel()){
 
     var email by remember {
         mutableStateOf(value = "")
     }
 
-
     var password by remember {
         mutableStateOf(value = "")
     }
+
+    var isLoading by remember {
+        mutableStateOf(value = false)
+    }
+
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +94,6 @@ fun LoginScreen (modifier: Modifier){
 
         Spacer(modifier = Modifier.height(10.dp))
 
-
         OutlinedTextField(
             value = password,
             onValueChange = {
@@ -93,12 +104,55 @@ fun LoginScreen (modifier: Modifier){
             },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation())
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {
+        Button(
+            onClick = {
 
-        }, modifier = Modifier.fillMaxWidth().height(60.dp)) {
-            Text(text = "Login", fontSize = 21.sp)
+                if (email.isBlank() || password.isBlank()) {
+                    AppUtil.showToast(
+                        context,
+                        "Please enter email and password!"
+                    )
+                    return@Button
+                }
+
+                isLoading = true
+
+                authViewModel.login(
+                    email.trim(),
+                    password
+                ) { success, errorMessage ->
+
+                    isLoading = false
+
+                    if (success) {
+
+                        navController.navigate("home") {
+                            popUpTo("auth") {
+                                inclusive = true
+                            }
+                        }
+
+                    } else {
+
+                        AppUtil.showToast(
+                            context,
+                            errorMessage ?: "Login failed!"
+                        )
+                    }
+                }
+            },
+            enabled = !isLoading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+        ) {
+            Text(
+                text = if (isLoading) "Logging in..." else "Login",
+                fontSize = 21.sp
+            )
         }
 
 
