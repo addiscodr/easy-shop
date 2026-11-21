@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +31,7 @@ import com.addiscodr.easyshop.pages.CategoryProductsPage
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import java.nio.file.WatchEvent
 
 @Composable
 fun CategoriesView(modifier: Modifier = Modifier){
@@ -49,9 +51,15 @@ fun CategoriesView(modifier: Modifier = Modifier){
                 }
             }
     }
+
+
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(20.dp)
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+
+
+
     ) {
+
         items(categoryList.value){item ->
             CategoryItem(category = item)
         }
@@ -61,8 +69,8 @@ fun CategoriesView(modifier: Modifier = Modifier){
 
 @Composable
 fun CategoryItem(category: CategoryModel){
-
     Card(
+
         modifier = Modifier.size(100.dp)
             .clickable{
                 GlobalNavigation.navController.navigate("category-products/"+category.id)
