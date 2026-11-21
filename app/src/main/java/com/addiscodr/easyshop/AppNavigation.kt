@@ -2,9 +2,11 @@ package com.addiscodr.easyshop
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.addiscodr.easyshop.pages.CategoryProductsPage
 import com.addiscodr.easyshop.screens.AuthScreen
 import com.addiscodr.easyshop.screens.HomeScreen
 import com.addiscodr.easyshop.screens.LoginScreen
@@ -16,6 +18,7 @@ import com.google.firebase.auth.auth
 fun AppNavigation(modifier: Modifier = Modifier){
 
     val navController = rememberNavController()
+    GlobalNavigation.navController = navController
 
     val isLoggedIn = Firebase.auth.currentUser != null
 
@@ -37,7 +40,15 @@ fun AppNavigation(modifier: Modifier = Modifier){
         composable(route = "home"){
             HomeScreen(modifier, navController)
         }
+        composable(route = "category-products/{categoryId}"){
+            val categoryId = it.arguments?.getString("categoryId")
+            CategoryProductsPage(modifier, categoryId?:"")
+        }
 
     }
 
+}
+
+object GlobalNavigation {
+    lateinit var navController: NavHostController
 }
