@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.addiscodr.easyshop.components.ProductDetailsView
 import com.addiscodr.easyshop.pages.CategoryProductsPage
+import com.addiscodr.easyshop.pages.CheckoutPage
 //import com.addiscodr.easyshop.pages.ProductDetailsPage
 import com.addiscodr.easyshop.screens.AuthScreen
 import com.addiscodr.easyshop.screens.HomeScreen
@@ -49,6 +50,9 @@ fun AppNavigation(modifier: Modifier = Modifier){
         composable(route = "product-details/{productId}"){
             val productId = it.arguments?.getString("productId")
             ProductDetailsView(modifier, productId?:"")
+        }
+        composable(route = "checkout"){
+            CheckoutPage(modifier)
         }
 
 

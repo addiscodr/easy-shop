@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -42,7 +43,7 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController){
 
     )
 
-    var selectedIndex by remember {
+    var selectedIndex by rememberSaveable {
         mutableStateOf(value = 0)
     }
 
@@ -76,7 +77,7 @@ fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int){
     when(selectedIndex){
         0 -> HomePage()
         1 -> FavoritePage()
-        2 -> CartPage()
+        2 -> CartPage(modifier = modifier)
         3 -> ProfilePage()
     }
 
